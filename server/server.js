@@ -20,7 +20,7 @@ connectDB()
 
 const io = new Server(expressServer, {
   cors: {
-    origin: allowedOrigins
+    origin: allowedOrigins,
   },
   maxHttpBufferSize: 1e8 // 100 MB
 });

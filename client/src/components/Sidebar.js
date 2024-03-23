@@ -60,7 +60,7 @@ const Sidebar = () => {
   useEffect(() => {
     socket.on('create-room-response', (msg) => {
       if (msg.status === 'failed')
-        alert(msg.msg)
+        alert("err at room-response", msg.msg)
       else if (msg.status === 'success') {
         joinRoom(msg.room.name)
         setAddRoomModalOpen(false)

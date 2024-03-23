@@ -55,9 +55,11 @@ const Chat = () => {
     socket.connect();
   }, [auth, isLoading])
 
+
   useEffect(() => {
     socket.on("connect_error", (err) => {
-      alert(err.message)
+      alert("err at connection", err.message)
+      console.log("err at connection")
     })
   }, [socket])
 
@@ -123,9 +125,11 @@ const Chat = () => {
         lastMessageGroup.push(message)
         setMessages([...messages.slice(0, -1), lastMessageGroup])
       } else {
+        // decryption
         setMessages([...messages, [message]])
       }
     } else {
+      // decryption
       setMessages([[message]])
     }
     if (messagesContainerRef.current) {
@@ -139,6 +143,7 @@ const Chat = () => {
     e.preventDefault();
     if (!inputMessage || !auth?.user || isLoading || !socket.connected)
       return
+    // encryption
     socket.emit('message', { message: inputMessage });
     setInputMessage('');
     setShowEmojis(false);
