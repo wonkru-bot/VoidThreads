@@ -17,7 +17,7 @@ COPY . .
 RUN chmod +x set_server_url.sh
 
 # Expose the port the client runs on
-EXPOSE 3000
+EXPOSE 3001
 
 # Set REACT_APP_SERVER_URL using the script if the environment variable is set
 ENTRYPOINT ["/bin/bash", "-c", "if [ \"$SET_SERVER_URL\" = \"true\" ]; then ./set_server_url.sh; fi && exec npm start"]
