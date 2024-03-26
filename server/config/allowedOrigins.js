@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const allowedOrigins = [
-    'http://192.168.1.5:3000',
+    'http://192.168.104.240:3000',
     'http://localhost:3000',
 ];
 
