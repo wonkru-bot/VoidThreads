@@ -5,6 +5,9 @@ const allowedOrigins = [
     'http://192.168.104.240:3000',
     'https://vt.emke.live',
     'http://localhost:3000',
+    'http://localhost:5000',
+    'http://185.185.127.18:3000',
+    'http://185.185.127.18:5000'
 ];
 
 // process.env.CLIENT_URL,
