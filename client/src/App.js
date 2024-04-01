@@ -5,9 +5,10 @@ import Layout from './components/Layout';
 import Chat from './components/Chat';
 import Register from './components/Register';
 import Login from './components/Login';
+import ResetPassNow from "./components/ResetPassword";
 
-const App = () => {  
-  
+const App = () => {
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -16,6 +17,7 @@ const App = () => {
 
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
+        <Route path="reset_password" element={<ResetPassNow />} />
 
       </Route>
     </Routes>
