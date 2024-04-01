@@ -22,6 +22,8 @@ const Register = () => {
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
+    const [email, setEmail] = useState('')
+
     const [errMsg, setErrMsg] = useState('');
 
     useEffect(() => {
@@ -39,7 +41,7 @@ const Register = () => {
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd, matchPwd])
+    }, [user, pwd, matchPwd, email])
 
     const handleSubmit = async (e) => {
         console.log("Clicked button")
@@ -52,7 +54,7 @@ const Register = () => {
         try {
 
             await axios.post('/register',
-                JSON.stringify({ user, pwd }),
+                JSON.stringify({ user, pwd, email }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -76,7 +78,7 @@ const Register = () => {
 
     return (
         <div className="w-full max-w-sm p-6 m-auto mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="flex justify-center mx-auto">
+            <div className="flex justify-center mx-auto text-white">
                 Register
             </div>
 
@@ -102,6 +104,19 @@ const Register = () => {
                         Must begin with a letter.<br />
                         Letters, numbers, underscores, hyphens allowed.
                     </p>
+                </div>
+
+                <div className='mt-2'>
+                    <label htmlFor="email" className="block text-sm text-gray-800 dark:text-gray-200">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        ref={userRef}
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={user}
+                        required
+                        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                    />
                 </div>
 
                 <div className="mt-4">
@@ -153,7 +168,7 @@ const Register = () => {
                     <p ref={errRef} className={errMsg ? "text-xs bg-slate-200 text-red-600 rounded-md p-1" : "hidden"} aria-live="assertive">{errMsg}</p>
                 </div>
 
-            </form>
+            </form >
 
             <p className="mt-8 text-xs font-light text-center text-gray-400"> Already have an account? <a href="/login" className="font-medium text-gray-700 dark:text-gray-200 hover:underline">Sign in</a></p>
         </div >

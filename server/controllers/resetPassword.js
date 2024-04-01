@@ -15,10 +15,16 @@ const handleResetPassword = async (req, res) => {
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10)
 
-        await User.update({
-            "username": user,
-            "password": hashedPwd,
-        })
+        await User.updateOne(
+            {
+                _id: userexist._id
+            },
+            {
+                $set: {
+                    "password": hashedPwd,
+                }
+            }
+        )
 
         res.status(201).json({ 'success': `New user ${user} created!` })
     } catch (err) {
