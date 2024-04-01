@@ -3,6 +3,8 @@ dotenv.config();
 
 const allowedOrigins = [
     'http://192.168.104.240:3000',
+    'https://192.168.1.5:3000',
+    'https://192.168.1.5:5000',
     'https://vt.emke.live',
     'http://localhost:3000',
     'http://localhost:5000',

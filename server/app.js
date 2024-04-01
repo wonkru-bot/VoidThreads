@@ -5,6 +5,7 @@ import refreshRouter from './routes/refresh.js'
 import logoutRouter from './routes/logout.js'
 import roomsRouter from './routes/rooms.js'
 import userRouter from './routes/user.js'
+import restPass from "./routes/resetPassword.js"
 import cors from 'cors'
 import corsOptions from './config/corsOptions.js'
 import cookieParser from 'cookie-parser'
@@ -43,6 +44,7 @@ app.use('/refresh', refreshRouter)
 app.use('/logout', logoutRouter)
 app.use('/rooms', roomsRouter)
 app.use('/user', userRouter)
+app.use('/resetpass', restPass)
 
 
 
