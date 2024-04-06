@@ -11,12 +11,15 @@ import FileAttachment from './FileAttachment';
 import EmojiPicker from 'emoji-picker-react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useNavigate } from 'react-router-dom';
+import RoomNav from './RoomNav';
+import { Toaster } from 'react-hot-toast';
 
 const Chat = () => {
   const { auth } = useAuth()
   const refresh = useRefreshToken()
   const socket = useSocket()
-
+  const [room, setRoom] = useState()
+ 
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [typingUser, setTypingUser] = useState('');
@@ -186,8 +189,12 @@ const Chat = () => {
         isLoading
           ? <Loading />
           : <div className="flex h-screen">
+    
             <Sidebar />
+         
             <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-gradient-to-bl from-zinc-300 to-gray-600">
+            <RoomNav  />
+            <Toaster />
               <div id="messages" ref={messagesContainerRef} className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
                 {
                   messages.map((messageGroup, index) =>
@@ -297,6 +304,8 @@ const Chat = () => {
                   </div>
                 </div>
               </form>
+              
+
             </div>
             {(!auth?.user || !socket.connected) && <SignInAsGuest />}
           </div>

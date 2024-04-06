@@ -12,6 +12,10 @@ const roomSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    code : {
+      type : Number,
+      required : true
+    },
     createdAt: {
       type: Date,
       default: Date.now,

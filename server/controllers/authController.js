@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const handleLogin = async (req, res) => {
+    console.log("Login asdfdsf")
     const { user, pwd } = req.body;
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' })
     

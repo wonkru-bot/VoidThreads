@@ -5,11 +5,11 @@ import refreshRouter from './routes/refresh.js'
 import logoutRouter from './routes/logout.js'
 import roomsRouter from './routes/rooms.js'
 import userRouter from './routes/user.js'
-import restPass from "./routes/resetPassword.js"
 import cors from 'cors'
 import corsOptions from './config/corsOptions.js'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/dbConn.js';
+import ResetRouter from './routes/resetPassword.js'
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv"
@@ -24,8 +24,7 @@ const app = express();
 
 
 // Cross Origin Resource Sharing
-app.use(cors(corsOptions));
-
+app.use(cors(corsOptions))
 // Middleware for json
 app.use(express.json());
 
@@ -39,12 +38,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 
 
 app.use('/register', registerRouter)
+app.use('/resetpass',ResetRouter)
 app.use('/auth', authRouter)
 app.use('/refresh', refreshRouter)
 app.use('/logout', logoutRouter)
 app.use('/rooms', roomsRouter)
 app.use('/user', userRouter)
-app.use('/resetpass', restPass)
 
 
 

@@ -10,6 +10,7 @@ const getAllRooms = async (req, res) => {
 }
 
 const createNewRoom = async (io, socket, roomName) => {
+    console.log("hi")
     if (!roomName)
         return
 
@@ -19,9 +20,12 @@ const createNewRoom = async (io, socket, roomName) => {
         return
     }
     try {
+        let randomNumber = Math.floor(Math.random() * 9000) + 1000;
+        console.log(randomNumber)
         const room = await Room.create({
             name: roomName,
-            author: socket.user.id
+            author: socket.user.id,
+            code: randomNumber
         })
 
         socket.emit('create-room-response', { status: 'success', msg: 'Room created successfully', room })

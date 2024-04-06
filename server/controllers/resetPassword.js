@@ -9,7 +9,7 @@ const handleResetPassword = async (req, res) => {
     const userexist = await User.findOne({ username: user }).exec()
     // const emailexist = userexist._id
     const emailexist = await User.findOne({ email: email }).exec()
-    if (userexist || emailexist) return res.sendStatus(409) // Conflict
+    // if (userexist || emailexist) return res.sendStatus(409) // Conflict
 
     try {
         // Encrypt the password

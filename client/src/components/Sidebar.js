@@ -134,7 +134,7 @@ const Sidebar = () => {
                       <div className='flex flex-row justify-between items-center'>
                         <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name)}>
                           <FaDotCircle className={`text-sm mr-2 ${room.name === currentRoom && 'text-blue-800'}`} />
-                          <span>{room.name}</span>
+                          <span>{room.name} <span> {room.name === "Lobby" ? '' : ":" }</span> {room?.code}</span>
                         </div>
                         {auth?.id === room.author && <MdDeleteOutline onClick={() => deleteRoom(room._id)} size={20} className='text-m hover:text-red-600 cursor-pointer' />}
                       </div>
@@ -143,7 +143,7 @@ const Sidebar = () => {
                         && <ul className='px-4'>
                           {
                             usersInRoom.map((user, userIndex) =>
-                              <UserListItem user={user} key={userIndex} />
+                              <UserListItem user={user} key={userIndex}  />
                             )
                           }
                         </ul>
