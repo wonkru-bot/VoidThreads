@@ -18,7 +18,7 @@ const Chat = () => {
   const { auth } = useAuth()
   const refresh = useRefreshToken()
   const socket = useSocket()
-  const [room, setRoom] = useState()
+ 
  
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');

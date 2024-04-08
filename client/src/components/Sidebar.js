@@ -12,6 +12,8 @@ import axios from '../api/axios';
 import UserListItem from './UserListItem';
 import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
+import {useDispatch} from 'react-redux'
+import { setRoom } from '../redux/rooms/currentRoomSlice';
 
 const Sidebar = () => {
   const [sidebarHidden, setSidebarHidden] = useState(true);
@@ -23,6 +25,7 @@ const Sidebar = () => {
   const socket = useSocket()
   const logout = useLogout()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const toggleSidebar = () => {
     setSidebarHidden((prev) => !prev);
@@ -51,6 +54,9 @@ const Sidebar = () => {
       return
     socket.emit('join-room', roomName)
     setCurrentRoom(roomName)
+    const joinedRoom = rooms.filter ((room) => room.name === roomName )
+    dispatch ( setRoom (joinedRoom[0]) )
+    
   }
 
   const deleteRoom = (roomId) => {
