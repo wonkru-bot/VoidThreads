@@ -14,6 +14,7 @@ import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import { setRoom } from '../redux/rooms/currentRoomSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Sidebar = () => {
   const [sidebarHidden, setSidebarHidden] = useState(true);
@@ -35,7 +36,8 @@ const Sidebar = () => {
     if (isAddRoomModalOpen)
       return
     if (!auth?.accessToken) {
-      alert("Please log in to create a new room.")
+      toast.error("Please log in to create a new room.")
+      // alert("Please log in to create a new room.")
       return
     }
     setAddRoomModalOpen(true);
@@ -66,7 +68,8 @@ const Sidebar = () => {
   useEffect(() => {
     socket.on('create-room-response', (msg) => {
       if (msg.status === 'failed')
-        alert("err at room-response", msg.msg)
+        toast.error(`err at room-response ${msg.msg}`)
+        // alert("err at room-response", msg.msg)
       else if (msg.status === 'success') {
         joinRoom(msg.room.name)
         setAddRoomModalOpen(false)
@@ -110,6 +113,7 @@ const Sidebar = () => {
 
   return (
     <>
+    <Toaster/>
       <span
         className={`${!sidebarHidden ? 'hidden' : 'block'} sm:hidden absolute bg-gray-400 text-black text-4xl top-5 left-4 cursor-pointer rounded-md`}
         onClick={() => toggleSidebar()}
@@ -140,7 +144,9 @@ const Sidebar = () => {
                       <div className='flex flex-row justify-between items-center'>
                         <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name)}>
                           <FaDotCircle className={`text-sm mr-2 ${room.name === currentRoom && 'text-blue-800'}`} />
-                          <span>{room.name} <span> {room.name === "Lobby" ? '' : ":" }</span> {room?.code}</span>
+                          <span>{room.name} 
+                          {/* <span> {room.name === "Lobby" ? '' : ":" }</span> {room?.code} */}
+                          </span>
                         </div>
                         {auth?.id === room.author && <MdDeleteOutline onClick={() => deleteRoom(room._id)} size={20} className='text-m hover:text-red-600 cursor-pointer' />}
                       </div>

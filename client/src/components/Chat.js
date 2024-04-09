@@ -12,6 +12,7 @@ import EmojiPicker from 'emoji-picker-react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useNavigate } from 'react-router-dom';
 import RoomNav from './RoomNav';
+import toast from "react-hot-toast";
 import { Toaster } from 'react-hot-toast';
 
 const Chat = () => {
@@ -61,7 +62,8 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on("connect_error", (err) => {
-      alert("err at connection", err.message)
+      // alert("err at connection", err.message)
+      toast.error("err at connection", err.message)
       console.log("err at connection")
     })
   }, [socket])
@@ -110,7 +112,8 @@ const Chat = () => {
   useEffect(() => {
 
     const handleUploadError = (message) => {
-      alert(message.message)
+      // alert(message.message)
+      toast.error(message.message)
     }
 
     socket.on('upload-error', handleUploadError)

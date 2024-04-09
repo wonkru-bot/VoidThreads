@@ -3,15 +3,27 @@ import { useSelector } from "react-redux";
 
 function RoomNav() {
   const { currentRoom } = useSelector((state) => state.currentRoom);
+  // console.log(currentRoom)
+  let curroom = ''
+  if(currentRoom===undefined){
+    curroom= "Lobby"
+  }
 
   const handleClick = () => {
-    toast.success(currentRoom.code);
+    if(currentRoom===undefined){
+      toast.error('No code for Lobby!')
+    }
+    else{
+      const cde = currentRoom.code
+      navigator.clipboard.writeText(cde)
+      toast.success(`Code is in clipboard ${cde}`); 
+    }
   };
 
   return (
     <>
       <div className="flex h-12 justify-between items-center">
-        <h1>Roshan</h1>
+        <h1 className="font-bold">{currentRoom===undefined? `${curroom}`:`${currentRoom.name}`}</h1>
         <button
           onClick={handleClick}
           className="border  rounded-lg p-3 border-red-500"
