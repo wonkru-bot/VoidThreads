@@ -3,12 +3,14 @@ import { useSelector } from "react-redux";
 
 function RoomNav() {
   const { currentRoom } = useSelector((state) => state.currentRoom);
-  // console.log(currentRoom)
+  console.log(currentRoom)
   let curroom = ''
   if(currentRoom===undefined){
     curroom= "Lobby"
   }
-
+  else{
+    console.log(currentRoom.name)
+  }
   const handleClick = () => {
     if(currentRoom===undefined){
       toast.error('No code for Lobby!')
