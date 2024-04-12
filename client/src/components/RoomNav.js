@@ -9,18 +9,25 @@ function RoomNav() {
     curroom= "Lobby"
   }
   else{
-    console.log(currentRoom.name)
+    console.log(currentRoom)
   }
-  const handleClick = () => {
-    if(currentRoom===undefined){
-      toast.error('No code for Lobby!')
+  const handleClick = async () => {
+    if (currentRoom === undefined) {
+        toast.error('No code for Lobby!');
+    } else if (currentRoom.code === undefined) {
+        currentRoom.code = "No ";
+        toast.error("No code for Lobby");
+    } else {
+        const cde = currentRoom.code;
+        try {
+            await navigator.clipboard.writeText(cde);
+            toast.success(`Code is in clipboard: ${cde}`);
+        } catch (error) {
+            console.error('Failed to write to clipboard:', error);
+            toast.error('Failed to copy code to clipboard');
+        }
     }
-    else{
-      const cde = currentRoom.code
-      navigator.clipboard.writeText(cde)
-      toast.success(`Code is in clipboard ${cde}`); 
-    }
-  };
+};
 
   return (
     <>
