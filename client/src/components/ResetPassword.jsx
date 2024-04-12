@@ -5,7 +5,7 @@ import axios from '../api/axios'
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const ResetPassNow = () => {
+function ResetPassword() {
     const navigate = useNavigate()
     const userRef = useRef()
     const errRef = useRef()
@@ -67,7 +67,7 @@ const ResetPassNow = () => {
             if (!err?.response) {
                 setErrMsg('No Server Response')
             } else if (err.response?.status === 409) {
-                setErrMsg('User Name Taken',err.response)
+                setErrMsg('User Name Taken', err.response)
                 console.log(err.response)
             } else {
                 setErrMsg('Registration Failed')
@@ -177,4 +177,4 @@ const ResetPassNow = () => {
     )
 }
 
-export default ResetPassNow
+export default ResetPassword
