@@ -42,9 +42,9 @@ function RoomNav() {
 
   return (
     <>
-      <div className="flex h-12 justify-between items-center">
-        <div className="flex flex-col p-4 text-gray-900">
-          <h1 className="font-bold " onClick={handledescription}>{currentRoom===undefined? `${curroom}`:`${currentRoom.name}`}</h1>
+      <div className="flex h-12 justify-between items-center p-12">
+        <div className="flex flex-col text-gray-900">
+          <h1 className="font-bold" onClick={handledescription}>{currentRoom===undefined? `${curroom}`:`${currentRoom.name}`}</h1>
           <h1 className="underline hover:cursor-pointer text-gray-950" onClick={handledescription}>Description</h1>
         </div>
         {
@@ -55,12 +55,14 @@ function RoomNav() {
           />: ''
         }
         {/* <h1 className="font-bold">Owner: {currentRoom===undefined? `${curroom}`:`${currentRoom.authorName}`}</h1> */}
+        <div className="flex justify-center">
         <button
           onClick={handleClick}
           className="border  rounded-lg p-3 border-red-500 text-gray-900"
         >
           Get code{" "}
         </button>
+        </div>
       </div>
     </>
   );

@@ -3,20 +3,22 @@ import { IoIosCloseCircle } from "react-icons/io";
 import AboutListUsers from './AboutListUsers';
 
 function AboutThread({handledescription,currentRoom}) {
-    const dateString = currentRoom.createdAt;
-    const date = new Date(dateString);
-    const months = [
-        "January", "February", "March", "April", "May", "June", 
-        "July", "August", "September", "October", "November", "December"
-      ];
-    // Extract day, month, and year
-    const day = date.getDate();
-    const monthIndex = date.getMonth(); // Months are zero-based, so add 1
-    const month = months[monthIndex];
-    const year = date.getFullYear();
+    const getcreateddate= (value)=>{
+        const dateString = value;
+        const date = new Date(dateString);
+        const months = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+          ];
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const month = months[monthIndex];
+        const year = date.getFullYear();
+    
+        const formattedDate = `${day}-${month}-${year}`;
+        return formattedDate
+    }
 
-    // Create the day-month-year format string
-    const formattedDate = `${day}-${month}-${year}`;
 
     const [roomName, setRoomName] = useState('')
     if (currentRoom === undefined) {
@@ -42,10 +44,10 @@ function AboutThread({handledescription,currentRoom}) {
                     <h2 className="card-title">
                     {currentRoom===undefined?"Lobby":currentRoom.name}
                     {/* room name===Lobby>? "badge-primary : badge-secondary"  &&& Old New*/}
-                    <div className={`p-3 badge badge-primary`}>Code : {currentRoom.code===undefined?'Free':currentRoom.code}</div>
+                    <div className={`p-3 badge badge-primary`}>Code : {currentRoom===undefined||currentRoom.code===undefined?'Free':currentRoom.code}</div>
                     </h2>
-                    <p>Created at : {formattedDate}</p>
-                    <p>Owner : {currentRoom.authorName===undefined?"Nobody":currentRoom.authorName}</p>
+                    <p>Created at : {currentRoom===undefined?'Somthing went wrong':getcreateddate(currentRoom.createdAt)}</p>
+                    <p>Owner : {currentRoom===undefined?"Nobody":currentRoom.authorName}</p>
                 </div>
                 <AboutListUsers/>
             </div>

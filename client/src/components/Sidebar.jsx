@@ -151,7 +151,7 @@ function Sidebar() {
                         </div>
                         {auth?.id === room.author && <MdDeleteOutline onClick={() => deleteRoom(room._id)} size={20} className='text-m hover:text-red-600 cursor-pointer' />}
                       </div>
-                      {
+                      {/* {
                         room.name === currentRoom && usersInRoom
                         && <ul className='px-4'>
                           {
@@ -160,7 +160,7 @@ function Sidebar() {
                             )
                           }
                         </ul>
-                      }
+                      } */}
                     </div>
                   </li>
                 )
