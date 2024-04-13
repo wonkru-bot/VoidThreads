@@ -19,19 +19,15 @@ function RoomNav() {
     } else {
         const cde = currentRoom.code;
         try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
             await navigator.clipboard.writeText(cde);
             toast.success(`Code is in clipboard: ${cde}`);
-          } else {
-            throw new Error('Clipboard API not supported');
-          }
         } catch (error) {
-          console.error('Failed to write to clipboard:', error);
-          toast.error('Failed to copy code to clipboard');
+            console.error('Failed to write to clipboard:', error);
+            toast.error(`Failed to copy code to clipboard ${error}`);
         }
     }
 };
-  
+
 
   return (
     <>
