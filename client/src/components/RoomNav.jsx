@@ -15,7 +15,6 @@ function RoomNav() {
     if (currentRoom === undefined) {
         toast.error('No code for Lobby!');
     } else if (currentRoom.code === undefined) {
-        currentRoom.code = "No ";
         toast.error("No code for Lobby");
     } else {
         const cde = currentRoom.code;
