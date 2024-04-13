@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MdCreate } from "react-icons/md";
 
 
-function AddNewRoomModal() {
+function AddNewRoomModal({ onClose, createRoom }) {
   const [roomName, setRoomName] = useState('')
 
   const handleSubmit = (e) => {
