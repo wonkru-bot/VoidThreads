@@ -56,9 +56,9 @@ function Sidebar() {
       return
     socket.emit('join-room', roomName)
     setCurrentRoom(roomName)
-    const joinedRoom = rooms.filter((room) => room.name === roomName)
-    dispatch(setRoom(joinedRoom[0]))
-
+    const joinedRoom = rooms.filter ((room) => room.name === roomName )
+    dispatch ( setRoom (joinedRoom[0]) )
+    
   }
 
   const deleteRoom = (roomId) => {
@@ -67,7 +67,7 @@ function Sidebar() {
 
   useEffect(() => {
     socket.on('create-room-response', (msg) => {
-      if (msg.status === 'failed') {
+      if (msg.status === 'failed'){
         toast.error(`err at room-response ${msg.msg}`)
         alert("err at room-response", msg.msg)
       }
@@ -92,7 +92,7 @@ function Sidebar() {
       setUsersInRoom(users)
     })
 
-  }, [socket, rooms])
+  }, [socket,rooms])
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -138,7 +138,7 @@ function Sidebar() {
               <IoIosAdd className="sm:text-xl text-4xl sm:px-0 px-1 sm:ml-0 ml-3 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400 sm:rounded-sm rounded-md" onClick={openAddRoomModal} />
             </div>
             <ul>
-              {
+            {
                 rooms.map((room, index) =>
                   <li key={index} className="m-2">
                     <div className='flex flex-col justify-center'>

@@ -2,9 +2,9 @@ import { createContext } from "react";
 import { io } from "socket.io-client";
 
 const SocketContext = createContext({});
-
+console.log(import.meta.env.VITE_REACT_APP_SERVER_URL)
 export function SocketProvider({ children }) {
-  const socket = io(import.meta.REACT_APP_SERVER_URL, {
+  const socket = io(import.meta.env.VITE_REACT_APP_SERVER_URL, { // Accessing environment variable directly from import.meta.env
     autoConnect: false,
     auth: {
       token: '',
@@ -19,4 +19,4 @@ export function SocketProvider({ children }) {
   )
 }
 
-export default SocketContext
+export default SocketContext;

@@ -11,7 +11,7 @@ const app = express();
 const routes = ["^/$", "/login", "/register", "/resetpass"]
 
 app.get(routes, (req, res) => {
-  fs.readFile(path.resolve('./build/index.html'), 'utf-8', (err, data) => {
+  fs.readFile(path.resolve('./index.html'), 'utf-8', (err, data) => {
     if (err) {
       console.err(err)
       return res.status(500).send("Internal Server Error")
