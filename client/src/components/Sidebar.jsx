@@ -33,6 +33,7 @@ function Sidebar() {
   const [codesucessRoomName, setcodesucessRoomName] = useState('')
 
   const setroomDispatch = (roomName)=>{
+    setCurrentRoom(roomName)
     const joinedRoom = rooms.filter ((room) => room.name === roomName )
     console.log(joinedRoom)
     dispatch ( setRoom (joinedRoom[0]) )
@@ -52,6 +53,7 @@ function Sidebar() {
   const handlecodewith = ()=>{
     if(handlewithcode===true){
       sethandlewithcode(false)
+      setroomDispatch("Lobby")
     }
     else{
       sethandlewithcode(true)
@@ -90,7 +92,6 @@ function Sidebar() {
     if(roomName==="Lobby"){
       console.log("its lobby bro")
       socket.emit('join-room', roomName)
-      setCurrentRoom(roomName)
       setroomDispatch(roomName)
     }
     else{
