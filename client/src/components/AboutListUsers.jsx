@@ -1,44 +1,33 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 
 function AboutListUsers() {
+    const { currentRoomUsers } = useSelector((state) => state.usersinRoom);
   return (
     <>
-    <div className="card-actions justify-end">
+    <div className="card-actions px-6 justify-start ">
         <div className="h-48 overflow-x-auto" >
             <table className="table">
                 {/* head */}
                 <thead>
                 <tr>
-                    <th></th>
+                    <th>No</th>
                     <th>Name</th>
                     <th>Role</th>
                 </tr>
                 </thead>
-                <tbody className='overflow-y-auto'>
-                {/* row 1 */}
-                <tr>
-                    <th>1</th>
-                    <td>Cy Ganderton</td>
-                    <td>Quality Control Specialist</td>
-                </tr>
-                {/* row 2 */}
-                <tr className="hover">
-                    <th>2</th>
-                    <td>Hart Hagerty</td>
-                    <td>Desktop Support Technician</td>
-                </tr>
-                {/* row 3 */}
-                <tr>
-                    <th>3</th>
-                    <td>Brice Swyre</td>
-                    <td>Tax Accountant</td>
-                </tr>
-                        {/* row 3 */}
-                        <tr>
-                    <th>3</th>
-                    <td>Brice Swyre</td>
-                    <td>Tax Accountant</td>
-                </tr>
+                <tbody className='overflow-auto'>
+                
+                {
+                    currentRoomUsers.map((users,index)=>
+                    <tr key={index+1}>
+                        <th>{index+1}</th>
+                        <td>{users.username}</td>
+                        <td>{users.userType}</td>
+                    </tr>
+                )
+                }
+                
                 </tbody>
             </table>
         </div>

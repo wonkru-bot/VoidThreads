@@ -2,19 +2,20 @@
 import React, { useEffect, useState } from 'react';
 // import { IoIosLink } from "react-icons/io";
 import { SiLinkerd } from "react-icons/si";
-import { FaDotCircle } from 'react-icons/fa';
+import { RiChatThreadFill } from "react-icons/ri";
 import { MdOutlineClose, MdOutlineSegment, MdDeleteOutline } from "react-icons/md";
 import { IoIosAdd } from "react-icons/io";
 import AddNewRoomModal from './AddNewRoomModal';
 import useAuth from '../hooks/useAuth';
 import useSocket from '../hooks/useSocket';
 import axios from '../api/axios';
-import UserListItem from './UserListItem';
 import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { setRoom } from '../redux/rooms/currentRoomSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { setUsersList } from '../redux/rooms/roomUsersSlice';
+import JoinRoomWithCode from './JoinRoomWithCode';
 
 function Sidebar() {
   const [sidebarHidden, setSidebarHidden] = useState(true);
@@ -27,6 +28,16 @@ function Sidebar() {
   const logout = useLogout()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [handlewithcode,sethandlewithcode] = useState(false)
+
+  const handlecodewith = ()=>{
+    if(handlewithcode===true){
+      sethandlewithcode(false)
+    }
+    else{
+      sethandlewithcode(true)
+    }
+  }
 
   const toggleSidebar = () => {
     setSidebarHidden((prev) => !prev);
@@ -51,14 +62,32 @@ function Sidebar() {
     socket.emit('create-room', roomName)
   }
 
+  const lobbycheck = (roomName)=>{
+    if(roomName===undefined){
+      sethandlewithcode(false)
+    }
+    else if(roomName==="Lobby"){
+      console.log("its lobby bro")
+      socket.emit('join-room', roomName)
+      setCurrentRoom(roomName)
+      sethandlewithcode(false)
+    }
+    else{
+      joinRoom(roomName)
+    }
+  }
+
   const joinRoom = (roomName) => {
-    if (roomName === currentRoom)
+    if (roomName === currentRoom){
       return
+    }
+    sethandlewithcode(true)
     socket.emit('join-room', roomName)
     setCurrentRoom(roomName)
+    console.log(roomName)
     const joinedRoom = rooms.filter ((room) => room.name === roomName )
+    console.log(joinedRoom)
     dispatch ( setRoom (joinedRoom[0]) )
-    
   }
 
   const deleteRoom = (roomId) => {
@@ -89,6 +118,9 @@ function Sidebar() {
     })
 
     socket.on('users-in-room', (users) => {
+      const userslist = users.map((room)=>room)
+      console.log(userslist)
+      dispatch(setUsersList(userslist))
       setUsersInRoom(users)
     })
 
@@ -143,24 +175,22 @@ function Sidebar() {
                   <li key={index} className="m-2">
                     <div className='flex flex-col justify-center'>
                       <div className='flex flex-row justify-between items-center'>
-                        <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name)}>
-                          <FaDotCircle className={`text-sm mr-2 ${room.name === currentRoom && 'text-blue-800'}`} />
+                        <div className="flex items-center cursor-pointer" onClick={() => lobbycheck(room.name)}>
+                          {
+                            currentRoom==="Lobby"?'':
+                            handlewithcode?
+                            <JoinRoomWithCode
+                            handlecodewith={handlecodewith}
+                            />:''
+                          }
+                          <RiChatThreadFill className={`text-xl mr-3 ${room.name === currentRoom && 'text-black text-xl'}`} />
                           <span>{room.name}
                             {/* <span> {room.name === "Lobby" ? '' : ":" }</span> {room?.code} */}
                           </span>
                         </div>
                         {auth?.id === room.author && <MdDeleteOutline onClick={() => deleteRoom(room._id)} size={20} className='text-m hover:text-red-600 cursor-pointer' />}
                       </div>
-                      {/* {
-                        room.name === currentRoom && usersInRoom
-                        && <ul className='px-4'>
-                          {
-                            usersInRoom.map((user, userIndex) =>
-                              <UserListItem user={user} key={userIndex} />
-                            )
-                          }
-                        </ul>
-                      } */}
+
                     </div>
                   </li>
                 )

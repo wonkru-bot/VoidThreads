@@ -6,6 +6,7 @@ import { useState } from "react";
 function RoomNav() {
   const [opendescription, setopendescription] = useState(false)
   const { currentRoom } = useSelector((state) => state.currentRoom);
+
   const handledescription = ()=>{
     if (opendescription === true){
       setopendescription(false)

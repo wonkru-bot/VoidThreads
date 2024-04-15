@@ -1,27 +1,29 @@
-import { configureStore,combineReducers } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import currentRoomReducer from './rooms/currentRoomSlice'
+import currentRoomUserReducer from './rooms/roomUsersSlice'
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 
 
 const rootReducer = combineReducers({
-currentRoom : currentRoomReducer
+  currentRoom: currentRoomReducer,
+  usersinRoom: currentRoomUserReducer,
 })
 
 
 const persistConfig = {
-    key: "root",
-    storage,
-  };
+  key: "root",
+  storage,
+};
 
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  export const store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 
-  export const persistor = persistStore(store)
+export const persistor = persistStore(store)

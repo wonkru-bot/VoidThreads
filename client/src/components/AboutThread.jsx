@@ -32,7 +32,7 @@ function AboutThread({handledescription,currentRoom}) {
       <div  className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex h-full items-end justify-center p-4  sm:items-center sm:p-0" onClick={handledescription}>
         <div className="card card-compact w-96 bg-base-100 shadow-xl">
-            <figure><img src="https://picsum.photos/900/200" alt="Shoes" /></figure>
+            <figure><img src="https://picsum.photos/900/200" alt="Random images" /></figure>
             <div className="card-body">
                 <div className='mb-4'>
                     <div className='flex justify-end'>
