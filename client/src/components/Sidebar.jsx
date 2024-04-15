@@ -29,6 +29,25 @@ function Sidebar() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [handlewithcode,sethandlewithcode] = useState(false)
+  const [codesucess, setcodesucess] = useState(false)
+  const [codesucessRoomName, setcodesucessRoomName] = useState('')
+
+  const setroomDispatch = (roomName)=>{
+    const joinedRoom = rooms.filter ((room) => room.name === roomName )
+    console.log(joinedRoom)
+    dispatch ( setRoom (joinedRoom[0]) )
+  }
+
+  const handlewithcodesucess = (roomName)=>{
+    if(codesucess===false){
+      setcodesucess(true)
+      setcodesucessRoomName(roomName)
+    }
+    else{
+      setcodesucess(false)
+      setcodesucessRoomName("Lobby")
+    }
+  }
 
   const handlecodewith = ()=>{
     if(handlewithcode===true){
@@ -62,18 +81,26 @@ function Sidebar() {
     socket.emit('create-room', roomName)
   }
 
+
   const lobbycheck = (roomName)=>{
-    if(roomName===undefined){
-      sethandlewithcode(false)
-    }
-    else if(roomName==="Lobby"){
+    // if(roomName===undefined){
+    //   sethandlewithcode(false)
+    // }
+    // else 
+    if(roomName==="Lobby"){
       console.log("its lobby bro")
       socket.emit('join-room', roomName)
       setCurrentRoom(roomName)
-      sethandlewithcode(false)
+      setroomDispatch(roomName)
     }
     else{
-      joinRoom(roomName)
+        setroomDispatch(roomName)
+        sethandlewithcode(true)
+        joinRoom(codesucessRoomName)
+        // joinRoom(roomName)
+      // else{ 6877
+      //   toast.error("Error at line 101 sidebar")
+      // }
     }
   }
 
@@ -85,9 +112,6 @@ function Sidebar() {
     socket.emit('join-room', roomName)
     setCurrentRoom(roomName)
     console.log(roomName)
-    const joinedRoom = rooms.filter ((room) => room.name === roomName )
-    console.log(joinedRoom)
-    dispatch ( setRoom (joinedRoom[0]) )
   }
 
   const deleteRoom = (roomId) => {
@@ -181,6 +205,8 @@ function Sidebar() {
                             handlewithcode?
                             <JoinRoomWithCode
                             handlecodewith={handlecodewith}
+                            handlewithcodesucess={(val)=>handlewithcodesucess(val)}
+                            setroomDispatch={(val)=>setroomDispatch(val)}
                             />:''
                           }
                           <RiChatThreadFill className={`text-xl mr-3 ${room.name === currentRoom && 'text-black text-xl'}`} />
