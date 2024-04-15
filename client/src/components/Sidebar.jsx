@@ -34,6 +34,7 @@ function Sidebar() {
 
   const setroomDispatch = (roomName)=>{
     setCurrentRoom(roomName)
+    socket.emit('join-room', roomName)
     const joinedRoom = rooms.filter ((room) => room.name === roomName )
     console.log(joinedRoom)
     dispatch ( setRoom (joinedRoom[0]) )
@@ -42,10 +43,12 @@ function Sidebar() {
   const handlewithcodesucess = (roomName)=>{
     if(codesucess===false){
       setcodesucess(true)
+      // setcodesucessRoomName("Lobby")
       setcodesucessRoomName(roomName)
     }
     else{
       setcodesucess(false)
+      // setcodesucessRoomName(roomName)
       setcodesucessRoomName("Lobby")
     }
   }
@@ -53,10 +56,10 @@ function Sidebar() {
   const handlecodewith = ()=>{
     if(handlewithcode===true){
       sethandlewithcode(false)
-      setroomDispatch("Lobby")
     }
     else{
       sethandlewithcode(true)
+      setroomDispatch("Lobby")
     }
   }
 
