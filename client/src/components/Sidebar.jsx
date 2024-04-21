@@ -11,55 +11,57 @@ import useSocket from '../hooks/useSocket';
 import axios from '../api/axios';
 import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setRoom } from '../redux/rooms/currentRoomSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import { setUsersList } from '../redux/rooms/roomUsersSlice';
 import JoinRoomWithCode from './JoinRoomWithCode';
+import {joinedwithcode, initialRoom, joinedroomError } from '../redux/rooms/joinWithCodeSlice';
 
 function Sidebar() {
   const [sidebarHidden, setSidebarHidden] = useState(true);
   const [isAddRoomModalOpen, setAddRoomModalOpen] = useState(false);
   const [rooms, setRooms] = useState([])
   const [currentRoom, setCurrentRoom] = useState('')
-  const [usersInRoom, setUsersInRoom] = useState([])
   const { auth } = useAuth()
   const socket = useSocket()
   const logout = useLogout()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [handlewithcode,sethandlewithcode] = useState(false)
-  const [codesucess, setcodesucess] = useState(false)
-  const [codesucessRoomName, setcodesucessRoomName] = useState('')
+  const { roomname, joinedRoom } = useSelector((state) => state.joinRoom);
+  
+  console.log(roomname); // this will log the current room name
+  console.log("helloo here at 35")
+  console.log(joinedRoom); // this will log the current room joined or not
 
-  const setroomDispatch = (roomName)=>{
-    setCurrentRoom(roomName)
-    socket.emit('join-room', roomName)
-    const joinedRoom = rooms.filter ((room) => room.name === roomName )
-    console.log(joinedRoom)
-    dispatch ( setRoom (joinedRoom[0]) )
-  }
 
-  const handlewithcodesucess = (roomName)=>{
-    if(codesucess===false){
-      setcodesucess(true)
-      // setcodesucessRoomName("Lobby")
-      setcodesucessRoomName(roomName)
-    }
-    else{
-      setcodesucess(false)
-      // setcodesucessRoomName(roomName)
-      setcodesucessRoomName("Lobby")
-    }
-  }
 
   const handlecodewith = ()=>{
-    if(handlewithcode===true){
+    if(handlewithcode){
       sethandlewithcode(false)
+      if(!joinedRoom){
+        // dispatch(initialRoom())
+        setCurrentRoom(roomname)
+        console.log("hello at 61 "+ currentRoom)
+        joinRoom(currentRoom)
+        console.log(currentRoom)
+      }
+      else{
+        console.log("hello at 51 "+ currentRoom)
+        dispatch(joinedroomError("Lobby"))
+        // socket.emit('join-room', "Lobby")
+      }
     }
     else{
       sethandlewithcode(true)
-      setroomDispatch("Lobby")
+      joinRoom(currentRoom)
+      const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
+      dispatch ( setRoom (joinedRom[0]) )
+      dispatch(joinedroomError(joinedRom[0]))
+      socket.emit('join-room', "Lobby")
+      console.log("hellmyy")
+      
     }
   }
 
@@ -88,35 +90,57 @@ function Sidebar() {
 
 
   const lobbycheck = (roomName)=>{
-    // if(roomName===undefined){
-    //   sethandlewithcode(false)
-    // }
-    // else 
-    if(roomName==="Lobby"){
+    if(roomName ==="Lobby"){
       console.log("its lobby bro")
+      setCurrentRoom(roomName)
+      console.log("wow here")
       socket.emit('join-room', roomName)
-      setroomDispatch(roomName)
+      dispatch(joinedroomError())
+      const joinedRom = rooms.filter ((room) => room.name === roomName )
+      dispatch ( setRoom (joinedRom[0]) )
     }
     else{
-        setroomDispatch(roomName)
-        sethandlewithcode(true)
-        joinRoom(codesucessRoomName)
-        // joinRoom(roomName)
-      // else{ 6877
-      //   toast.error("Error at line 101 sidebar")
-      // }
+      if(joinedRoom){
+        sethandlewithcode(false)
+        console.log("wow")
+        // socket.emit('join-room', roomName)
+        setCurrentRoom(roomName)
+
+        dispatch(joinedwithcode(roomName))
+        const joinedRom = rooms.filter ((room) => room.name === roomName )
+        dispatch ( setRoom (joinedRom[0]) )
+      }
     }
   }
 
   const joinRoom = (roomName) => {
+    if(roomName!==roomname){
+      const joinedRom = rooms.filter ((room) => room.name === roomName )
+      dispatch ( setRoom (joinedRom[0]) )
+      setCurrentRoom(roomName)
+      lobbycheck(roomName)
+      console.log("look ghere bro")
+      sethandlewithcode(true)
+    }
     if (roomName === currentRoom){
+      if(joinedRoom){
+        sethandlewithcode(true)
+        lobbycheck(roomName)
+        console.log("here at 121")
+      }
       return
     }
-    sethandlewithcode(true)
-    socket.emit('join-room', roomName)
     setCurrentRoom(roomName)
-    console.log(roomName)
+    lobbycheck(roomName)
+
   }
+
+  // const jointroom=(roomName)=>{
+  //   if(!joinedRoom &&  currentRoom===roomName){
+
+  //   }
+  // }
+
 
   const deleteRoom = (roomId) => {
     socket.emit('delete-room', roomId)
@@ -147,9 +171,8 @@ function Sidebar() {
 
     socket.on('users-in-room', (users) => {
       const userslist = users.map((room)=>room)
-      console.log(userslist)
+      // console.log(userslist)
       dispatch(setUsersList(userslist))
-      setUsersInRoom(users)
     })
 
   }, [socket,rooms])
@@ -159,8 +182,9 @@ function Sidebar() {
       try {
         const result = await axios.get('/rooms')
         setRooms(result.data)
-
+        dispatch(initialRoom()) // initializing Lobby!
         result.data.length && joinRoom(result.data[0].name) && setCurrentRoom(result.data[0].name)
+        socket.emit('join-room', result.data[0].name)
       } catch (err) { console.error(err) }
     }
 
@@ -203,14 +227,14 @@ function Sidebar() {
                   <li key={index} className="m-2">
                     <div className='flex flex-col justify-center'>
                       <div className='flex flex-row justify-between items-center'>
-                        <div className="flex items-center cursor-pointer" onClick={() => lobbycheck(room.name)}>
+                        <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name)}>
                           {
                             currentRoom==="Lobby"?'':
                             handlewithcode?
                             <JoinRoomWithCode
                             handlecodewith={handlecodewith}
-                            handlewithcodesucess={(val)=>handlewithcodesucess(val)}
-                            setroomDispatch={(val)=>setroomDispatch(val)}
+                            rooms={rooms}
+                            sethandlewithcode={sethandlewithcode}
                             />:''
                           }
                           <RiChatThreadFill className={`text-xl mr-3 ${room.name === currentRoom && 'text-black text-xl'}`} />

@@ -63,7 +63,7 @@ function Chat() {
   useEffect(() => {
     socket.on("connect_error", (err) => {
       // alert("err at connection", err.message)
-      toast.error("err at connection", err.message)
+      toast.error(`Err : ${err.message}`)
       console.log("err at connection")
     })
   }, [socket])

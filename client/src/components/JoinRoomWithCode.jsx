@@ -1,15 +1,21 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { IoIosCloseCircle } from 'react-icons/io'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {joinedwithcode, initialRoom, joinedroomError } from '../redux/rooms/joinWithCodeSlice';
+import { setRoom } from '../redux/rooms/currentRoomSlice';
+import useSocket from '../hooks/useSocket';
+
 // check if user failed 3 times then set handlewithcode=true so it close the attempt
 // 
 
 
 
 
-function JoinRoomWithCode({handlecodewith,handlewithcodesucess,setroomDispatch}) {
+function JoinRoomWithCode({handlecodewith,rooms,sethandlewithcode}) {
+    const socket = useSocket()
     const { currentRoom } = useSelector((state) => state.currentRoom);
+    const distpatch = useDispatch()
     const [code, setcode] = useState("")
     // console.log(currentRoom)
     const handleClose = (event) => {
@@ -17,6 +23,7 @@ function JoinRoomWithCode({handlecodewith,handlewithcodesucess,setroomDispatch})
         event.stopPropagation();
         // Call the handlecodewith function
         handlecodewith();
+        sethandlewithcode(false)
       };
 
     const stopPropagation = (event) => {
@@ -33,15 +40,22 @@ function JoinRoomWithCode({handlecodewith,handlewithcodesucess,setroomDispatch})
     const checkcode =()=>{
         if(currentRoom===undefined){
             toast.error("no code for this room!")
+            sethandlewithcode(false)
         }
         else if(code===String(currentRoom.code)){
             toast.success(`Welcome to ${currentRoom.name}`)
-            handlewithcodesucess(currentRoom.name)
+            distpatch(joinedwithcode(currentRoom.name))
+            sethandlewithcode(false)
+            socket.emit('join-room', currentRoom.name)
             handlecodewith()
         }
         else{
             toast.error("Not a valid code!")
-            // setroomDispatch("Lobby")
+            distpatch(joinedroomError())
+            // sethandlewithcode(false)
+            // const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
+            // distpatch ( setRoom (joinedRom[0]) )
+            // socket.emit('join-room', "Lobby")
         }
     }
 
