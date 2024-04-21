@@ -14,12 +14,15 @@ import { useNavigate } from 'react-router-dom';
 import RoomNav from './RoomNav';
 import toast from "react-hot-toast";
 import { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTheme } from '../redux/rooms/setThemeSlice';
 
 function Chat() {
+  const dispatch =  useDispatch()
   const { auth } = useAuth()
   const refresh = useRefreshToken()
   const socket = useSocket()
-
+  const { selectedTheme }=useSelector((state)=> state.currentTheme)
 
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -36,6 +39,7 @@ function Chat() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    dispatch(setTheme("bg-gradient-to-bl from-zinc-300 to-gray-600"))
     const verifyRefreshToken = async () => {
       try {
         await refresh()
@@ -195,7 +199,7 @@ function Chat() {
 
             <Sidebar />
 
-            <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-gradient-to-bl from-zinc-300 to-gray-600">
+            <div className={`flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen ${selectedTheme}`}>
             {/* <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-gradient-to-t from-violet-200 to-red-100"> */}
               <RoomNav />
               <Toaster />

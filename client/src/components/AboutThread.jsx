@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import { IoIosCloseCircle } from "react-icons/io";
+import ThemeLists from "../context/ThemeList"
 import AboutListUsers from './AboutListUsers';
+import { useDispatch } from 'react-redux';
+import { setTheme } from '../redux/rooms/setThemeSlice';
 
 function AboutThread({handledescription,currentRoom}) {
-    const getcreateddate= (value)=>{
+  const Dispatch = useDispatch()
+  const getcreateddate= (value)=>{
         const dateString = value;
         const date = new Date(dateString);
         const months = [
@@ -19,8 +23,12 @@ function AboutThread({handledescription,currentRoom}) {
         return formattedDate
     }
 
+    const handleTheme=(val)=>{
+      console.log(val)
+      Dispatch(setTheme(val))
+    }
 
-    const [roomName, setRoomName] = useState('')
+
     if (currentRoom === undefined) {
         // toast.error('No code for Lobby!');
         currentRoom ==="Lobby"
@@ -30,12 +38,26 @@ function AboutThread({handledescription,currentRoom}) {
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
       <div  className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex h-full items-end justify-center p-4  sm:items-center sm:p-0" onClick={handledescription}>
+        <div className="flex h-full items-end justify-center p-4  sm:items-center sm:p-0" >
         <div className="card card-compact w-96 bg-base-100 shadow-xl">
             <figure><img src="https://picsum.photos/900/200" alt="Random images" /></figure>
             <div className="card-body">
                 <div className='mb-4'>
-                    <div className='flex justify-end'>
+                    <div className='flex justify-between'>
+                    <div className="dropdown">
+                      <div tabIndex={0} role="button" className="btn m-1">Select Theme</div>
+                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-slate-600 rounded-box w-36">
+                          {
+                            ThemeLists.map((theme,index)=>{
+                              return(
+                                <li key={index}>
+                                  <a onClick={()=>handleTheme(theme.theme)}>{theme.name}</a>
+                                </li>
+                              )
+                            })
+                          }
+                        </ul>
+                      </div>
                         <div className=" btn rounded-3xl" onClick={handledescription}>
                             Close!
                         <IoIosCloseCircle className='text-red-500 text-2xl' />
@@ -49,6 +71,7 @@ function AboutThread({handledescription,currentRoom}) {
                     <p>Created at : {currentRoom===undefined?'Somthing went wrong':getcreateddate(currentRoom.createdAt)}</p>
                     <p>Owner : {currentRoom===undefined?"Nobody":currentRoom.authorName}</p>
                 </div>
+
                 <AboutListUsers/>
             </div>
         </div>
