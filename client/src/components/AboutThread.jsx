@@ -46,12 +46,12 @@ function AboutThread({handledescription,currentRoom}) {
                     <div className='flex justify-between'>
                     <div className="dropdown">
                       <div tabIndex={0} role="button" className="btn m-1">Select Theme</div>
-                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-slate-600 rounded-box w-36">
+                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-gradient-to-tl from-stone-600 to-slate-400 rounded-box w-36">
                           {
                             ThemeLists.map((theme,index)=>{
                               return(
                                 <li key={index}>
-                                  <a onClick={()=>handleTheme(theme.theme)}>{theme.name}</a>
+                                  <a className='text-white font-mono' onClick={()=>handleTheme(theme.theme)}>{theme.name}</a>
                                 </li>
                               )
                             })
