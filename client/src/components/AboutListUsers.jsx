@@ -23,7 +23,7 @@ function AboutListUsers() {
                     <tr key={index+1}>
                         <th>{index+1}</th>
                         <td>{users.username}</td>
-                        <td>{users.userType}</td>
+                        <td>{users.userType?users.userType:"Admin"}</td>
                     </tr>
                 )
                 }

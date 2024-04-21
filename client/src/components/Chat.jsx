@@ -63,8 +63,13 @@ function Chat() {
   useEffect(() => {
     socket.on("connect_error", (err) => {
       // alert("err at connection", err.message)
+<<<<<<< HEAD
       toast.error(`Err : ${err.message}`)
       console.log("err at connection")
+=======
+      toast.error(`Error: ${err.message}`)
+      console.log(`Error: ${err.message}`)
+>>>>>>> a1c6659a22a6bef7b8e2ed95053c6c8e66e444ec
     })
   }, [socket])
 
@@ -196,6 +201,7 @@ function Chat() {
             <Sidebar />
 
             <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-gradient-to-bl from-zinc-300 to-gray-600">
+            {/* <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen bg-gradient-to-t from-violet-200 to-red-100"> */}
               <RoomNav />
               <Toaster />
               <div id="messages" ref={messagesContainerRef} className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
@@ -244,7 +250,7 @@ function Chat() {
                                         ? message.isImage
                                           ? <img alt={message.fileName} src={`data:${message.type.mime};base64,${message.buffer.toString('base64')}`} className='rounded-md max-w-full sm:max-w-xs' />
                                           : <FileAttachment fileName={message.fileName} size={message.size} type={message.type.mime} buffer={message.buffer} />
-                                        : <span className={`px-4 py-2 rounded-lg inline-block ${message.user === auth.user ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-800'} ${messageIndex === messageGroup.length - 1 && (message.user === auth.user ? 'rounded-br-none' : 'rounded-bl-none')}`}>{message.message}</span>
+                                        : <span className={`px-4 py-2 rounded-lg inline-block ${message.user === auth.user ? 'bg-indigo-950 text-white  ' : 'bg-gray-400 text-gray-800'} ${messageIndex === messageGroup.length - 1 && (message.user === auth.user ? 'rounded-br-none' : 'rounded-bl-none')}`}>{message.message}</span>
                                       }
                                     </div>
                                   )
@@ -271,7 +277,7 @@ function Chat() {
               <form onSubmit={handleSubmit}>
                 <div className="border-t-2 border-gray-400 px-4 pt-4 mb-2 sm:mb-0">
                   <div className="relative flex">
-                    <input type="text" ref={messageInputRef} value={inputMessage} placeholder="Write your message!" className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-6 bg-gray-200 rounded-md py-3" onChange={(e) => setInputMessage(e.target.value)} />
+                    <input type="text" ref={messageInputRef} value={inputMessage} placeholder="Write your message!" className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-6 bg-gray-200 rounded-lg py-3" onChange={(e) => setInputMessage(e.target.value)} />
                     <input ref={fileRef} type="file" onChange={handleFileChange} className="hidden" />
                     <input ref={imageFileRef} type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
                     <input ref={profilePictureFileRef} type="file" onChange={handleProfilePicture} accept="image/*" className="hidden" />
