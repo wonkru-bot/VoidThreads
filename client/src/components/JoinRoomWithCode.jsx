@@ -12,7 +12,7 @@ import useSocket from '../hooks/useSocket';
 
 
 
-function JoinRoomWithCode({handlecodewith,rooms,sethandlewithcode}) {
+function JoinRoomWithCode({handlecodewith,rooms,sethandlewithcode,setCurrentRoom}) {
     const socket = useSocket()
     const { currentRoom } = useSelector((state) => state.currentRoom);
     const distpatch = useDispatch()
@@ -44,17 +44,18 @@ function JoinRoomWithCode({handlecodewith,rooms,sethandlewithcode}) {
         }
         else if(code===String(currentRoom.code)){
             toast.success(`Welcome to ${currentRoom.name}`)
+            // sethandlewithcode(false)
             distpatch(joinedwithcode(currentRoom.name))
-            sethandlewithcode(false)
             socket.emit('join-room', currentRoom.name)
             handlecodewith()
         }
         else{
             toast.error("Not a valid code!")
             distpatch(joinedroomError())
-            // sethandlewithcode(false)
-            // const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
-            // distpatch ( setRoom (joinedRom[0]) )
+            sethandlewithcode(false)
+            const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
+            distpatch ( setRoom (joinedRom[0]) )
+            setCurrentRoom("Lobby")
             // socket.emit('join-room', "Lobby")
         }
     }

@@ -5,6 +5,7 @@ import refreshRouter from './routes/refresh.js'
 import logoutRouter from './routes/logout.js'
 import roomsRouter from './routes/rooms.js'
 import userRouter from './routes/user.js'
+import newCodeRouter from "./routes/setNewCode.js"
 import cors from 'cors'
 import corsOptions from './config/corsOptions.js'
 import cookieParser from 'cookie-parser'
@@ -38,12 +39,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 
 
 app.use('/register', registerRouter)
-app.use('/resetpass',ResetRouter)
+app.use('/resetpass', ResetRouter)
 app.use('/auth', authRouter)
 app.use('/refresh', refreshRouter)
 app.use('/logout', logoutRouter)
 app.use('/rooms', roomsRouter)
 app.use('/user', userRouter)
+app.use('/setnewcode', newCodeRouter)
 
 
 

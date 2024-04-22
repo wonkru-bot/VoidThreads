@@ -31,13 +31,15 @@ function Sidebar() {
   const [handlewithcode,sethandlewithcode] = useState(false)
   const { roomname, joinedRoom } = useSelector((state) => state.joinRoom);
   
+  console.log(auth.user)
   console.log(roomname); // this will log the current room name
+  console.log(auth?.id); // this will log the current room name
   console.log("helloo here at 35")
   console.log(joinedRoom); // this will log the current room joined or not
 
 
-
-  const handlecodewith = ()=>{
+  const handlecodewith = (author=null)=>{
+    console.log(author)
     if(handlewithcode){
       sethandlewithcode(false)
       if(!joinedRoom){
@@ -46,16 +48,20 @@ function Sidebar() {
         console.log("hello at 61 "+ currentRoom)
         joinRoom(currentRoom)
         console.log(currentRoom)
+        const joinedRom = rooms.filter ((room) => room.name === currentRoom )
+        dispatch ( setRoom (joinedRom[0]) )
       }
       else{
         console.log("hello at 51 "+ currentRoom)
         dispatch(joinedroomError("Lobby"))
+        // const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
+        // dispatch ( setRoom (joinedRom[0]) )
         // socket.emit('join-room', "Lobby")
       }
     }
     else{
       sethandlewithcode(true)
-      joinRoom(currentRoom)
+      // joinRoom(currentRoom)
       const joinedRom = rooms.filter ((room) => room.name === "Lobby" )
       dispatch ( setRoom (joinedRom[0]) )
       dispatch(joinedroomError(joinedRom[0]))
@@ -86,6 +92,16 @@ function Sidebar() {
 
   const createRoom = async (roomName) => {
     socket.emit('create-room', roomName)
+    try{
+      const joinedRom = rooms.filter ((room) => room.name === roomName )
+      dispatch ( setRoom (joinedRom[0]) )
+      socket.emit('join-room', roomName)
+      toast.success("Code will be deleted in One Minitue")
+    }
+    catch(err){
+      toast.error(err)
+    }
+
   }
 
 
@@ -97,6 +113,7 @@ function Sidebar() {
       socket.emit('join-room', roomName)
       dispatch(joinedroomError())
       const joinedRom = rooms.filter ((room) => room.name === roomName )
+      console.log(joinedRom)
       dispatch ( setRoom (joinedRom[0]) )
     }
     else{
@@ -108,14 +125,25 @@ function Sidebar() {
 
         dispatch(joinedwithcode(roomName))
         const joinedRom = rooms.filter ((room) => room.name === roomName )
+        console.log(joinedRom)
         dispatch ( setRoom (joinedRom[0]) )
       }
     }
   }
 
-  const joinRoom = (roomName) => {
+  const joinRoom = (roomName,author=null) => {
+    console.log(author)
+    if(auth?.id === author){
+      console.log(auth.user)
+      console.log(author)
+      socket.emit('join-room', roomName)
+      setCurrentRoom(roomName)
+      const joinedRom = rooms.filter ((room) => room.name === roomName )
+      dispatch ( setRoom (joinedRom[0]) )
+    }
     if(roomName!==roomname){
       const joinedRom = rooms.filter ((room) => room.name === roomName )
+      console.log(joinedRom)
       dispatch ( setRoom (joinedRom[0]) )
       setCurrentRoom(roomName)
       lobbycheck(roomName)
@@ -125,8 +153,8 @@ function Sidebar() {
     if (roomName === currentRoom){
       if(joinedRoom){
         sethandlewithcode(true)
-        lobbycheck(roomName)
         console.log("here at 121")
+        lobbycheck(roomName)
       }
       return
     }
@@ -135,11 +163,6 @@ function Sidebar() {
 
   }
 
-  // const jointroom=(roomName)=>{
-  //   if(!joinedRoom &&  currentRoom===roomName){
-
-  //   }
-  // }
 
 
   const deleteRoom = (roomId) => {
@@ -227,7 +250,7 @@ function Sidebar() {
                   <li key={index} className="m-2">
                     <div className='flex flex-col justify-center'>
                       <div className='flex flex-row justify-between items-center'>
-                        <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name)}>
+                        <div className="flex items-center cursor-pointer" onClick={() => joinRoom(room.name,room.author)}>
                           {
                             currentRoom==="Lobby"?'':
                             handlewithcode?
@@ -235,6 +258,7 @@ function Sidebar() {
                             handlecodewith={handlecodewith}
                             rooms={rooms}
                             sethandlewithcode={sethandlewithcode}
+                            setCurrentRoom={setCurrentRoom}
                             />:''
                           }
                           <RiChatThreadFill className={`text-xl mr-3 ${room.name === currentRoom && 'text-black text-xl'}`} />

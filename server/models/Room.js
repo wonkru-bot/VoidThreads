@@ -17,7 +17,7 @@ const roomSchema = new Schema({
     // required: true,
   },
   code: {
-    type: Number,
+    type: String,
     required: true
   },
   createdAt: {

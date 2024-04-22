@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 
 function AboutListUsers() {
     const { currentRoomUsers } = useSelector((state) => state.usersinRoom);
+    // console.log(currentRoomUsers)
   return (
     <>
-    <div className="card-actions px-6 justify-start ">
+    <div className="card-actions px-20 justify-start ">
         <div className="h-48 overflow-x-auto" >
             <table className="table">
                 {/* head */}

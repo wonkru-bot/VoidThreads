@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { CiSquareInfo } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import SignInLine from './SignInLine';
 
 function SignInAsGuest() {
+  const [loginopen,setloginopen] = useState(false)
   const { setAuth } = useAuth()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
@@ -13,11 +15,26 @@ function SignInAsGuest() {
     setAuth({ user: username })
   }
 
+  const handleLoginButton=()=>{
+    if(loginopen){
+      setloginopen(false)
+    }
+    else{
+      setloginopen(true)
+    }
+  }
+
   return (
+    <>
     <div className="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+      {
+        loginopen?
+        <SignInLine
+        handleLoginButton={handleLoginButton}
+        />:''
+      }
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-gray-500 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
             <div className="bg-gray-300 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -58,7 +75,10 @@ function SignInAsGuest() {
                     <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/5"></span>
                   </div>
                   <div className="mt-4">
-                    <button onClick={() => navigate('/login')} className="w-full px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50">
+                    <button onClick={() => {
+                            setloginopen(true)
+                            
+                            }} className="w-full px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50">
                       Sign In
                     </button>
                   </div>
@@ -71,6 +91,7 @@ function SignInAsGuest() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

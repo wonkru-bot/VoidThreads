@@ -2,11 +2,19 @@ import React, { useState } from 'react'
 import { IoIosCloseCircle } from "react-icons/io";
 import ThemeLists from "../context/ThemeList"
 import AboutListUsers from './AboutListUsers';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setTheme } from '../redux/rooms/setThemeSlice';
+import axios from '../api/axios';
+import toast from 'react-hot-toast';
 
 function AboutThread({handledescription,currentRoom}) {
+  const { currentRoomUsers } = useSelector((state) => state.usersinRoom);
+  const filteredUsers = currentRoomUsers.filter(user => !user.userType);
+  console.log(filteredUsers[0])
+  console.log(currentRoom._id)
+
   const Dispatch = useDispatch()
+  const [newcode,setnewcode]=useState('')
   const getcreateddate= (value)=>{
         const dateString = value;
         const date = new Date(dateString);
@@ -23,10 +31,37 @@ function AboutThread({handledescription,currentRoom}) {
         return formattedDate
     }
 
+    const handlesetnewcode=async()=>{
+      const req={
+        room_id:currentRoom._id,
+        nwcode:newcode
+      }
+      try{
+        axios.post('/setnewcode',
+          req,
+          {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+          }
+        )
+        toast.success(`Code will be deleted in 3 Minitue`)
+      }
+      catch(eror){
+        toast.error(eror)
+      }
+    }
+
+
     const handleTheme=(val)=>{
       console.log(val)
       Dispatch(setTheme(val))
     }
+
+    const handlenewcode = (value)=>{
+      const val = value.target.value
+      setnewcode(val)
+  }
+
 
 
     if (currentRoom === undefined) {
@@ -66,10 +101,40 @@ function AboutThread({handledescription,currentRoom}) {
                     <h2 className="card-title">
                     {currentRoom===undefined?"Lobby":currentRoom.name}
                     {/* room name===Lobby>? "badge-primary : badge-secondary"  &&& Old New*/}
-                    <div className={`p-3 badge badge-primary`}>Code : {currentRoom===undefined||currentRoom.code===undefined?'Free':currentRoom.code}</div>
+                    <div className={`p-3 badge badge-primary`}>Code : {
+                    currentRoom === undefined || currentRoom.code === undefined
+                    ? 'Free'
+                    : currentRoom.code === null
+                    ? 'Expired'
+                    : currentRoom.code === ''
+                    ? 'Expired'
+                    : currentRoom.code}
+                    </div>
                     </h2>
-                    <p>Created at : {currentRoom===undefined?'Somthing went wrong':getcreateddate(currentRoom.createdAt)}</p>
-                    <p>Owner : {currentRoom===undefined?"Nobody":currentRoom.authorName}</p>
+                    {
+                      filteredUsers[0]!==undefined && currentRoom.code === ''?(
+                    <div className='flex flex justify-between'>
+                      <div className='w-full'>
+                        <input
+                            placeholder="Enter new Code"
+                            defaultValue="" 
+                            type="text"
+                            onChange={(e)=>handlenewcode(e)}
+                             className='input input-bordered text-white w-72 max-w-xs h-10' />
+                      </div>
+                      <div>
+                        <button 
+                        type="button"
+                        onClick={handlesetnewcode}
+                         className='btn font-bold text-white bg-gradient-to-tr from-gray-900 to-stone-500 rounded-lg'>Set New Code</button>
+                      </div>
+                    </div>
+                    ):''
+                  }
+                    <div>
+                      <p>Created at : {currentRoom===undefined?'Somthing went wrong':getcreateddate(currentRoom.createdAt)}</p>
+                      <p>Owner : {currentRoom===undefined?"Nobody":currentRoom.authorName}</p>
+                    </div>
                 </div>
 
                 <AboutListUsers/>

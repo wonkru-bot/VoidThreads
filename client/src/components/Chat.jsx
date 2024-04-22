@@ -72,6 +72,7 @@ function Chat() {
     })
   }, [socket])
 
+
   useEffect(() => {
     if (isLoading || !auth?.user)
       return
@@ -160,6 +161,7 @@ function Chat() {
   };
 
   const handleFileChange = (e) => {
+    console.log("file uploading ...")
     const file = e.target.files[0]
     if (!file)
       return

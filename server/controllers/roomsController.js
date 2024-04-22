@@ -25,12 +25,18 @@ const createNewRoom = async (io, socket, roomName) => {
         const room = await Room.create({
             name: roomName,
             author: socket.user.id,
-            code: randomNumber
+            code: String(randomNumber)
         })
 
         socket.emit('create-room-response', { status: 'success', msg: 'Room created successfully', room })
         io.emit('new-room-created', room);
         console.log(`${socket.user.username} created the ${roomName} chat room`)
+
+        setTimeout(async () => {
+            await Room.updateOne({ _id: room._id }, { $set: { code: '' } });
+            console.log(`Code cleared for room ${roomName} after 1 minutes`);
+        }, 1 * 60 * 1000);  // change 10 into 
+
     } catch (err) {
         console.error(err)
     }

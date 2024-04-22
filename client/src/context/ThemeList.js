@@ -14,6 +14,10 @@ const ThemeLists = [
     {
         name: "Secoundary",
         theme: "bg-gradient-to-tr from-emerald-300 to-yellow-200"
+    },
+    {
+        name: "Tertiary",
+        theme: "bg-gradient-to-tr from-pink-300 to-lime-200"
     }
 
 ]
