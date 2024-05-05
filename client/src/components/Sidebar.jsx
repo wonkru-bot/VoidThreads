@@ -19,6 +19,7 @@ import JoinRoomWithCode from './JoinRoomWithCode';
 import {joinedwithcode, initialRoom, joinedroomError } from '../redux/rooms/joinWithCodeSlice';
 
 function Sidebar() {
+  const [search , setsearch]= useState('')
   const [sidebarHidden, setSidebarHidden] = useState(true);
   const [isAddRoomModalOpen, setAddRoomModalOpen] = useState(false);
   const [rooms, setRooms] = useState([])
@@ -219,6 +220,9 @@ function Sidebar() {
     navigate('/login')
   }
 
+console.log(search)
+
+
   return (
     <>
       <Toaster />
@@ -244,9 +248,17 @@ function Sidebar() {
               </div>
               <IoIosAdd className="sm:text-xl text-4xl sm:px-0 px-1 sm:ml-0 ml-3 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400 sm:rounded-sm rounded-md" onClick={openAddRoomModal} />
             </div>
+            <input 
+                type="text"
+                onChange={(e)=>setsearch(e.target.value)}
+                placeholder="Search Rooms"
+                 className="input input-bordered h-8 w-full max-w-xs" />
             <ul>
             {
-                rooms.map((room, index) =>
+                rooms.filter((item)=>{
+                  return search.toLowerCase() === ''? 
+                  item: item.name.toLowerCase().includes(search)
+                }).map((room, index) =>
                   <li key={index} className="m-2">
                     <div className='flex flex-col justify-center'>
                       <div className='flex flex-row justify-between items-center'>
