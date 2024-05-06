@@ -73,8 +73,8 @@ io.on('connection', (socket) => {
     console.log(`${socket.user.username} joined to ${roomName}`)
   })
 
-  socket.on('create-room', (roomName) => {
-    roomsController.createNewRoom(io, socket, roomName)
+  socket.on('create-room', (roomName, codeexpirytime) => {
+    roomsController.createNewRoom(io, socket, roomName, codeexpirytime)
   })
 
   socket.on('delete-room', (roomId) => {

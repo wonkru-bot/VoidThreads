@@ -9,7 +9,7 @@ const getAllRooms = async (req, res) => {
     res.json(rooms)
 }
 
-const createNewRoom = async (io, socket, roomName) => {
+const createNewRoom = async (io, socket, roomName, codeexpirytime) => {
     console.log("hi")
     if (!roomName)
         return
@@ -27,15 +27,15 @@ const createNewRoom = async (io, socket, roomName) => {
             author: socket.user.id,
             code: String(randomNumber)
         })
-
+        console.log(codeexpirytime)
         socket.emit('create-room-response', { status: 'success', msg: 'Room created successfully', room })
         io.emit('new-room-created', room);
         console.log(`${socket.user.username} created the ${roomName} chat room`)
 
         setTimeout(async () => {
             await Room.updateOne({ _id: room._id }, { $set: { code: '' } });
-            console.log(`Code cleared for room ${roomName} after 1 minutes`);
-        }, 1 * 60 * 1000);  // change 10 into 
+            console.log(`Code cleared for room ${roomName} after ${codeexpirytime} minutes`);
+        }, parseInt(codeexpirytime) * 60 * 1000);  // change 10 into 
 
     } catch (err) {
         console.error(err)

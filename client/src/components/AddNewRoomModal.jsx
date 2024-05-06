@@ -4,12 +4,20 @@ import { MdCreate } from "react-icons/md";
 
 function AddNewRoomModal({ onClose, createRoom }) {
   const [roomName, setRoomName] = useState('')
+  const [codeexpirytime, setcodeexpirytime] = useState('')
+
+  const handleInputChange = (e) => {
+    // Remove any non-numeric characters from the input
+    const cleanedValue = e.target.value.replace(/\D/g, '');
+    // Update the state with the cleaned value
+    setcodeexpirytime(cleanedValue);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!roomName)
       return
-    createRoom(roomName)
+    createRoom(roomName,parseInt(codeexpirytime))
   }
 
   return (
@@ -39,6 +47,17 @@ function AddNewRoomModal({ onClose, createRoom }) {
                         required
                         className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                         placeholder="Room Name"
+                      />
+                    </div>
+                    <div className='mt-4'>
+                      <input
+                        id="codetime"
+                        type="text"
+                        onChange={handleInputChange}
+                        value={codeexpirytime}
+                        required
+                        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                        placeholder="Minitues eg: 6"
                       />
                     </div>
                     <div className="mt-4">

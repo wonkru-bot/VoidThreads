@@ -91,13 +91,14 @@ function Sidebar() {
     setAddRoomModalOpen(false);
   };
 
-  const createRoom = async (roomName) => {
-    socket.emit('create-room', roomName)
+  const createRoom = async (roomName, codeexpirytime) => {
     try{
+      socket.emit('create-room', roomName,parseInt(codeexpirytime))
+      console.log("code expiry time",codeexpirytime)
       const joinedRom = rooms.filter ((room) => room.name === roomName )
       dispatch ( setRoom (joinedRom[0]) )
       socket.emit('join-room', roomName)
-      toast.success("Code will be deleted in One Minitue")
+      toast.success(`Code will be deleted in ${codeexpirytime} Minitue`)
     }
     catch(err){
       toast.error(err)

@@ -62,7 +62,7 @@ function Register() {
                 }
             );
 
-            navigate('/login')
+            navigate('/')
 
         } catch (err) {
             if (!err?.response) {
