@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTheme } from '../redux/rooms/setThemeSlice';
+import CryptoJS from 'crypto-js';
 
 function Chat() {
   const dispatch =  useDispatch()
@@ -37,6 +38,8 @@ function Chat() {
   const [showEmojis, setShowEmojis] = useState(false);
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
+
+  const key = import.meta.env.VITE_CRYPTO_KEY;
 
   useEffect(() => {
     dispatch(setTheme("bg-gradient-to-bl from-zinc-300 to-gray-600"))
@@ -83,7 +86,11 @@ function Chat() {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-      addNewMessage(message)
+      console.log(message)
+      const decrypted = CryptoJS.AES.decrypt(message.message, key).toString(CryptoJS.enc.Utf8);
+      console.log(decrypted)
+      const updatedData = { ...message, message: decrypted }
+      addNewMessage(updatedData)
     }
 
     socket.on('message', handleNewMessage);
@@ -155,7 +162,10 @@ function Chat() {
     if (!inputMessage || !auth?.user || isLoading || !socket.connected)
       return
     // encryption
-    socket.emit('message', { message: inputMessage });
+    const iv = CryptoJS.lib.WordArray.random(16); // Generate a random 16-byte IV
+    const EncryptedInputMessage = CryptoJS.AES.encrypt(inputMessage, key, { iv: iv }).toString();
+    console.log(EncryptedInputMessage)
+    socket.emit('message', { message: EncryptedInputMessage });
     setInputMessage('');
     setShowEmojis(false);
   };
