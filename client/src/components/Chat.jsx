@@ -24,6 +24,7 @@ function Chat() {
   const refresh = useRefreshToken()
   const socket = useSocket()
   const { selectedTheme }=useSelector((state)=> state.currentTheme)
+  const { currentRoom } = useSelector((state) => state.currentRoom);
 
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -40,6 +41,13 @@ function Chat() {
   const navigate = useNavigate()
 
   const key = import.meta.env.VITE_CRYPTO_KEY;
+
+  console.log(currentRoom)
+
+  useEffect(()=>{
+    setMessages([])
+  },[currentRoom])
+
 
   useEffect(() => {
     dispatch(setTheme("bg-gradient-to-bl from-zinc-300 to-gray-600"))
@@ -87,10 +95,23 @@ function Chat() {
   useEffect(() => {
     const handleNewMessage = (message) => {
       console.log(message)
+      if(message.user ==="server"){
+        console.log("hey")
+        addNewMessage(message)
+      }
+      else if(message.buffer){
+        console.log("here at 106")
+        addNewMessage(message)
+      }
+      else{
+      console.log("here at 110")
       const decrypted = CryptoJS.AES.decrypt(message.message, key).toString(CryptoJS.enc.Utf8);
       console.log(decrypted)
       const updatedData = { ...message, message: decrypted }
+      console.log(updatedData)
       addNewMessage(updatedData)
+
+    }
     }
 
     socket.on('message', handleNewMessage);
@@ -125,6 +146,7 @@ function Chat() {
 
     const handleUploadError = (message) => {
       // alert(message.message)
+      console.log(message)
       toast.error(message.message)
     }
 
@@ -137,6 +159,7 @@ function Chat() {
   }, [socket])
 
   const addNewMessage = (message) => {
+    console.log(message)
     if (messages.length > 0) {
       const lastMessageGroup = [...messages[messages.length - 1]]
       if (lastMessageGroup[lastMessageGroup.length - 1].user === message.user) {

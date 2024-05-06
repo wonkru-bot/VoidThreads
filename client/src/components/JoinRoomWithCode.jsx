@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { IoIosCloseCircle } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,9 +36,10 @@ function JoinRoomWithCode({handlecodewith,rooms,sethandlewithcode,setCurrentRoom
         setcode(val)
     }
     // console.log(code)
-    
+
+
     const checkcode =()=>{
-        if(currentRoom===undefined){
+        if(currentRoom===undefined || currentRoom.code===""){
             toast.error("no code for this room!")
             sethandlewithcode(false)
         }
